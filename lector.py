@@ -338,7 +338,7 @@ def readYal(archivo):
     for rule in new_rule_tokens:
         if rule[0] != "'" and rule[0] != '(' and rule[0] != '"':
             print(key, 'Error: ' + rule +
-                  ' no es un token valido\nTermiando programa')
+                  'Token no valido\n')
             exit()
 
     rule_token_regex = ""

@@ -7,8 +7,8 @@ TOKENS = {0: '', 1: ' return ID ', 2: ' return PLUS ', 3: ' return TIMES ', 4: '
 def print_tokens():
     return TOKENS
 
-def simular_afd2(afd, cadena):
-    estado_actual = afd.get_estado_inicial()
+def simular_afd2(afdd, cadena):
+    estado_actual = afdd.getEstadoInicial()
     cadena_aceptada = False
     estado_aceptado = []
     # print(estado_actual.id)
@@ -16,7 +16,7 @@ def simular_afd2(afd, cadena):
     while len(cadena) > 0:
         for char in cadena:
             # print(char)
-            estado_siguiente = estado_actual.get_trancisiones(char)
+            estado_siguiente = estado_actual.getTransition(char)
             if estado_siguiente:
                 cadena_leida += char
                 estado_actual = estado_siguiente[0]
@@ -29,15 +29,15 @@ def simular_afd2(afd, cadena):
                     print(token_encontrado[1], token_encontrado[0].token)
 
                     cadena = cadena[len(token_encontrado[1]):]
-                    estado_actual = afd.get_estado_inicial()
+                    estado_actual = afdd.getEstadoInicial()
                     cadena_leida = ''
                     estado_aceptado = []
                     break
                 else:
                     cadena_leida += char
-                    print(cadena_leida, 'Lexema no encontrado')
+                    print(cadena_leida, 'Lexical error')
                     cadena = cadena[len(cadena_leida):]
-                    estado_actual = afd.get_estado_inicial()
+                    estado_actual = afdd.getEstadoInicial()
                     cadena_leida = ''
                     break
         if estado_aceptado != []:
@@ -46,8 +46,8 @@ def simular_afd2(afd, cadena):
             break
 
 def main():
-    with open('afd.pickle', 'rb') as f:
-        afd = pickle.load(f)
+    with open('afdd.pickle', 'rb') as f:
+        afdd = pickle.load(f)
     if len(sys.argv) == 2:
         try:
             with open(sys.argv[1], 'r') as f:
@@ -56,10 +56,10 @@ def main():
             print('Archivo no encontrado')
             exit()
     else:
-        print('No se ha ingresado los parametros correctos')
+        print('Parametros incorrectos')
         exit()
     
-    simular_afd2(afd, validacion)
+    simular_afd2(afdd, validacion)
 
 if __name__ == '__main__':
     main()

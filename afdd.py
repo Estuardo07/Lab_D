@@ -343,9 +343,7 @@ def getEstadoFinal(tab):
 
 def regex_to_afd(regex, token_dic):
     TOKEN = token_dic
-    print('Construyendo el AFD...')
     arbol = crearArbol(regex)
-    print('Arbol construido y listo')
     calcNullable(arbol)
     posorden(arbol, calcNullable)
     firstpos(arbol)
@@ -355,7 +353,7 @@ def regex_to_afd(regex, token_dic):
     root = arbol.primera_posicion
     alfabeto = getSymbols(tab)
     alfabeto.remove('#')
-    afd = AFD()
+    afdd = AFD()
     conjunto_estados = {}
     transiciones = []
     id = 0
@@ -412,17 +410,17 @@ def regex_to_afd(regex, token_dic):
                         es.es_final = True
                         k = final.index(val)
                         es.token = TOKEN[k]
-        afd.estados.add(es)
+        afdd.estados.add(es)
 
-    for estado in afd.estados:
+    for estado in afdd.estados:
         for k in newTransitions:
             if k[0] == estado.id:
-                estado.addTransition(k[1], afd.getEstado(k[2]))
+                estado.addTransition(k[1], afdd.getEstado(k[2]))
 
-    return afd
+    return afdd
 
-def simularAFD(afd, cadena):
-    estado_actual = afd.getEstadoInicial()
+def simularAFD(afdd, cadena):
+    estado_actual = afdd.getEstadoInicial()
     cadena_aceptada = False
     estado_aceptado = []
     cadena_leida = ''
@@ -440,15 +438,15 @@ def simularAFD(afd, cadena):
                     print(token_encontrado[1], token_encontrado[0].token)
 
                     cadena = cadena[len(token_encontrado[1]):]
-                    estado_actual = afd.getEstadoInicial()
+                    estado_actual = afdd.getEstadoInicial()
                     cadena_leida = ''
                     estado_aceptado = []
                     break
                 else:
                     cadena_leida += char
-                    print(cadena_leida, 'Lexema no encontrado')
+                    print(cadena_leida, 'Lexical error')
                     cadena = cadena[len(cadena_leida):]
-                    estado_actual = afd.getEstadoInicial()
+                    estado_actual = afdd.getEstadoInicial()
                     cadena_leida = ''
                     break
         if estado_aceptado != []:
